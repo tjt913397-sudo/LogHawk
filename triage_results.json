@@ -1,0 +1,62 @@
+[
+  {
+    "line": "Jul 25 08:00:00 web01 sudo:   gitlab : TTY=pts/0 ; PWD=/home/gitlab ; USER=root ; COMMAND=/usr/bin/apt update",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Standard system package update command executed with elevated privileges."
+  },
+  {
+    "line": "Jul 25 08:00:05 web01 sshd[5486]: Accepted password for alice from 10.0.0.178 port 12806 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful SSH authentication from an internal IP address is typically normal operational activity."
+  },
+  {
+    "line": "Jul 25 08:00:50 web01 sshd[3528]: Failed password for git from 198.51.100.172 port 5683 ssh2",
+    "label": "SUSPICIOUS",
+    "severity": 2,
+    "reason": "The log indicates a failed SSH authentication attempt for the git user from an external IP address."
+  },
+  {
+    "line": "Jul 25 08:01:34 web01 sshd[5036]: Accepted password for gitlab from 10.0.0.45 port 58036 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful SSH authentication from a private IP address for a standard service account suggests normal internal activity."
+  },
+  {
+    "line": "Jul 25 08:02:48 web01 sshd[7689]: Accepted publickey for backup from 10.0.0.171 port 53872 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful SSH login from an internal IP using public key authentication for a standard backup service account."
+  },
+  {
+    "line": "Jul 25 08:03:55 web01 sshd[3952]: Accepted password for jdoe from 10.0.0.174 port 32227 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "This log entry represents a standard successful SSH authentication from an internal IP address."
+  },
+  {
+    "line": "Jul 25 08:04:20 web01 sshd[8148]: Accepted publickey for backup from 10.0.0.35 port 39118 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful public key authentication from an internal IP for a backup service account indicates normal activity."
+  },
+  {
+    "line": "Jul 25 08:05:41 web01 sshd[6112]: Accepted password for backup from 10.0.0.83 port 36205 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful SSH login from an internal IP for a service account indicates expected operational activity."
+  },
+  {
+    "line": "Jul 25 08:06:40 web01 sshd[3815]: Accepted password for backup from 10.0.0.104 port 39039 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful SSH login from a private internal IP address for a standard backup service account suggests routine maintenance activity."
+  },
+  {
+    "line": "Jul 25 08:07:40 web01 sshd[4538]: Accepted publickey for backup from 10.0.0.54 port 3592 ssh2",
+    "label": "BENIGN",
+    "severity": 1,
+    "reason": "Successful SSH publickey authentication for a backup user from an internal IP address indicates routine administrative activity."
+  }
+]

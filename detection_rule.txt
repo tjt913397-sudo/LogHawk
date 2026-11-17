@@ -1,0 +1,17 @@
+
+
+title: SSH Authentication Failure for Git User
+id: 8f3a2b1c-4d5e-6f7a-8b9c-0d1e2f3a4b5c
+status: experimental
+description: Detects SSH authentication failures specifically targeting the git user account, often indicative of brute-force or unauthorized access attempts against repository services.
+logsource:
+    category: authentication
+    product: linux
+    service: sshd
+detection:
+    selection:
+        message|contains: 'Failed password for git'
+    condition: selection
+falsepositives:
+    - Legitimate failed logins by authorized users
+level: medium
