@@ -1,4 +1,4 @@
-# &lt;Your Tool Name&gt;
+# &lt;LogHawk&gt;
 
 An AI-powered **security log triage** command-line tool. It reads a security log
 file and uses a coding language model (Qwen Coder, or any OpenAI-compatible
