@@ -1,46 +1,96 @@
-# Demo
+# LogHawk — Application Demonstration
 
-A short walkthrough of the tool running end to end.
+## Overview
 
-## Record a short demo (2 to 3 minutes)
-Show these steps on screen (a screen recording, or a few clear screenshots):
+LogHawk is a Python command-line security log triage application that uses Qwen to classify log entries as BENIGN, SUSPICIOUS, or MALICIOUS. It can export analysis results to CSV and JSON and generate Sigma detection rules.
 
-1. Install and configure:
-   ```
-   pip install -r requirements.txt
-   export QWEN_BASE_URL="http://your-server:8000/v1"
-   export QWEN_API_KEY="your-api-key"
-   ```
-2. Show the help so viewers see the options:
-   ```
-   python logtriage.py --help
-   ```
-3. Run it on a real log and generate a rule:
-   ```
-   python logtriage.py --input ssh_auth_log.txt --output results.csv --rule sigma --rule-out rule.txt
-   ```
-4. Open `results.csv` and `rule.txt` to show the output.
-5. Run the tests to show they pass:
-   ```
-   python -m pytest
-   ```
-6. Run the Semgrep static analysis scan:
-   ```
-   semgrep scan --config auto logtriage.py
-   ```
+## Demonstration Method
 
-## Example run
+This demonstration uses screenshots of successful application execution, unit testing, and security analysis.
 
-```
-$ python logtriage.py --input ssh_auth_log.txt --rule sigma --rule-out rule.txt
-Connected. Model: Qwen/Qwen2.5-Coder-7B-Instruct
-Assessing 200 entries from ssh_auth_log.txt ...
-  BENIGN     121
-  SUSPICIOUS  58
-  MALICIOUS   21
-Wrote triage_results.csv
-Wrote rule.txt
+## 1. Command-Line Interface
+
+Command:
+
+```bash
+python logtriage.py --help
 ```
 
-Put your recording link (or screenshots) here, plus one or two sentences about
-what the tool does and what you would improve next.
+The application displays its available arguments, including input files, output formats, batch limits, worker counts, and Sigma rule generation.
+
+**Evidence:** Lab 7 Screenshot 1.
+
+## 2. End-to-End Log Analysis
+
+Command:
+
+```bash
+python logtriage.py --input ssh_auth_log.txt --output results.csv --json results.json --limit 3 --max-workers 2 --rule sigma --rule-out rule.txt
+```
+
+Model: `qwen3.5-122b-a10b`
+
+Verified results:
+
+- Entries analyzed: 3
+- BENIGN: 2
+- SUSPICIOUS: 1
+- MALICIOUS: 0
+
+Generated files: `results.csv`, `results.json`, and `rule.txt`.
+
+**Evidence:** Lab 7 Screenshot 2.
+
+## 3. Sigma Detection Rule
+
+Command:
+
+```bash
+cat rule.txt
+```
+
+LogHawk generated a Sigma-style detection rule identifying failed SSH password authentication attempts.
+
+**Evidence:** Lab 7 Screenshot 3.
+
+## 4. Automated Unit Tests
+
+Command:
+
+```bash
+python -m pytest -v test_logtriage.py
+```
+
+Result: All five unit tests passed.
+
+**Evidence:** Lab 7 Screenshot 4.
+
+## 5. Security Analysis
+
+Command:
+
+```bash
+semgrep scan --config auto logtriage.py
+```
+
+Result: Semgrep scanned one Python file using 290 rules and reported zero findings.
+
+**Evidence:** Lab 7 Screenshot 5.
+
+## 6. Continuous Integration
+
+GitHub Actions automatically runs pytest and Semgrep when changes are pushed to the repository.
+
+The `test-and-scan` job completed successfully.
+
+**Evidence:** Lab 7 Screenshot 6.
+
+## Repository
+
+https://github.com/tjt913397-sudo/LogHawk
+
+## Future Improvements
+
+Future improvements include validating generated Sigma rules against the Sigma specification, improving rule metadata, and optimizing model response times for larger log datasets.
+
+The demonstration used three log entries because the Qwen server had previously experienced long response times. A complete 200-entry analysis remains a potential additional test.
