@@ -1,5 +1,5 @@
 # LogHawk — Application Demonstration
-
+ 
 ## Overview
 
 LogHawk is a Python command-line security log triage application that uses Qwen to classify log entries as BENIGN, SUSPICIOUS, or MALICIOUS. It can export analysis results to CSV and JSON and generate Sigma detection rules.
