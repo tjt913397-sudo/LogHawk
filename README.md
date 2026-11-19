@@ -1,39 +1,64 @@
-# LogHawk
+# &lt;Your Tool Name&gt;
 
-LogHawk is an AI-powered security log analysis tool developed in Python for the IS2083 Advanced Scripting course at UTSA.
+An AI-powered **security log triage** command-line tool. It reads a security log
+file and uses a coding language model (Qwen Coder, or any OpenAI-compatible
+model) to classify each entry as **BENIGN**, **SUSPICIOUS**, or **MALICIOUS**,
+with a severity (1&ndash;5) and a one-sentence reason. It processes a whole file
+in parallel, saves the results, and can generate a detection rule from what it
+finds.
+
+_Capstone project for IS2083 Advanced Scripting (combines Labs 5 and 6)._
 
 ## Features
-
-- Classifies security log entries as BENIGN, SUSPICIOUS, or MALICIOUS.
-- Uses Qwen through GPUStack to analyze log activity.
-- Returns structured results with severity scores and explanations.
-- Processes multiple security log entries using batch processing.
-- Exports results to CSV and JSON.
-- Generates Sigma detection rules.
-- Demonstrates prompt-injection attacks and defenses.
-- Includes automated tests for JSON parsing and input validation.
+- Classifies each log entry with a label, a 1&ndash;5 severity, and a reason.
+- Returns validated JSON and falls back safely on bad output.
+- Processes a whole log file in batch, one bad line never stops the run.
+- Generates a detection rule (Sigma, iptables, or regex) from the findings.
+- Treats log text as untrusted input and uses a hardened prompt to resist prompt injection.
+- Ships with offline tests and a CI workflow.
 
 ## Requirements
+- Python 3.9 or newer
+- The `openai` package: `pip install -r requirements.txt`
+- Access to an OpenAI-compatible model endpoint (a vLLM server, the class Qwen Coder server, etc.)
 
-- Python 3
-- Jupyter Notebook or JupyterLab
-- OpenAI Python library
-- Access to a compatible Qwen API server and an API key
+## Setup
+```
+pip install -r requirements.txt
+export QWEN_BASE_URL="http://your-server:8000/v1"
+export QWEN_API_KEY="your-api-key"
+```
+On Windows PowerShell use `setx` or `$env:QWEN_BASE_URL="..."` instead of `export`.
 
-## How to Run
+## Usage
+```
+python logtriage.py --input security_log.txt
+python logtriage.py --input ssh_auth_log.txt --output results.csv --json results.json
+python logtriage.py --input ssh_auth_log.txt --rule sigma --rule-out rule.txt
+```
+See all options with:
+```
+python logtriage.py --help
+```
 
-1. Download the Jupyter notebook from this repository.
-2. Open it in JupyterLab.
-3. Install the required Python library using `%pip install openai`.
-4. Configure the Qwen API server address.
-5. Enter your API key securely when prompted.
-6. Run the notebook cells in order.
-7. Upload a security log dataset to analyze.
+## Testing
+The tests use a fake model, so they run with no server and no key:
+```
+pip install -r requirements.txt
+python -m pytest
+```
 
-## Project Status
+## Static analysis (Semgrep)
+Semgrep reads the code without running it and reports security issues and risky
+patterns (SAST):
+```
+semgrep scan --config auto logtriage.py
+```
+The CI workflow runs both the tests and Semgrep on every push.
 
-Lab 6 extends the original Lab 5 project. The current saved batch results cover 10 log entries because the shared model server was responding slowly during testing.
+## Security notes
+- The API key is read from an environment variable; it is never hard-coded or committed.
+- Log data is treated as untrusted; a hardened prompt resists instructions hidden in the input.
 
-## Security
-
-API keys are entered using Python's `getpass` module and should never be committed to this repository.
+## License
+MIT &mdash; see the `LICENSE` file.

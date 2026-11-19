@@ -1,0 +1,29 @@
+name: LogHawk CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: python -m pytest -v test_logtriage.py
+
+      - name: Run Semgrep security scan
+        run: semgrep scan --config auto logtriage.py
